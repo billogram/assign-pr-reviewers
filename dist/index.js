@@ -5986,9 +5986,6 @@ const github = __importStar(__webpack_require__(438));
             owner: (_a = context === null || context === void 0 ? void 0 : context.repo) === null || _a === void 0 ? void 0 : _a.owner,
             repo: (_b = context === null || context === void 0 ? void 0 : context.repo) === null || _b === void 0 ? void 0 : _b.repo,
             pull_number: Number(pr_number),
-            mediaType: {
-                format: 'diff'
-            }
         });
         console.log(pullRequest);
         if (!token) {

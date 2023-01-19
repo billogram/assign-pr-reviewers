@@ -16,9 +16,9 @@ import { Context } from '@actions/github/lib/context';
             owner: context?.repo?.owner,
             repo: context?.repo?.repo,
             pull_number: Number(pr_number),
-            #mediaType: {
-            #  format: 'diff'
-            #}
+            /*mediaType: {
+              format: 'diff'
+            }*/
         });
         console.log(pullRequest);
 
