@@ -5990,7 +5990,7 @@ const github = __importStar(__webpack_require__(438));
                 format: 'diff'
             }
         });
-        core.info(`XXX: ${pullRequest}`);
+        console.log(pullRequest);
         if (!token) {
             return core.setFailed(`Required input "token" not provided`);
         }

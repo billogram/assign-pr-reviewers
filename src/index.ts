@@ -20,7 +20,7 @@ import { Context } from '@actions/github/lib/context';
               format: 'diff'
             }
         });
-        core.info(`XXX: ${pullRequest}`);
+        console.log(pullRequest);
 
         if (!token) {
             return core.setFailed(`Required input "token" not provided`);
