@@ -2,7 +2,9 @@
 
 GitHub Action to assign PR reviewers based on list of comma-separated usernames
 
-
+#### 📋 Billogram
+Modified this action to take pull request number as an input parameter.
+Also set node version to node16.
 
 #### 📋 GitHub Action Inputs
 
