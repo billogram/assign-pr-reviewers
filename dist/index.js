@@ -5974,10 +5974,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
 (() => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e, _f, _g;
+    var _a, _b, _c;
     try {
         const context = github === null || github === void 0 ? void 0 : github.context;
         const token = core.getInput('token', { required: true });
+        const pr_number = core.getInput('pr_number', { required: true });
         const ignoreDrafts = core.getInput('ignore-drafts', { required: false });
         const users = getCleanUsersList(context, core.getInput('users', { required: true }));
         if (!token) {
@@ -5995,18 +5996,15 @@ const github = __importStar(__webpack_require__(438));
         if (!hasValidRepoInContext(context)) {
             return core.setFailed(`Valid repo is missing from context`);
         }
-        if (!hasValidPullRequestNumberInContext(context)) {
-            return core.setFailed(`Valid Pull Request number is missing from context`);
-        }
         core.setSecret(token);
         const octokit = github.getOctokit(token);
         yield octokit.pulls.requestReviewers({
             owner: (_a = context === null || context === void 0 ? void 0 : context.repo) === null || _a === void 0 ? void 0 : _a.owner,
             repo: (_b = context === null || context === void 0 ? void 0 : context.repo) === null || _b === void 0 ? void 0 : _b.repo,
-            pull_number: Number((_d = (_c = context === null || context === void 0 ? void 0 : context.payload) === null || _c === void 0 ? void 0 : _c.pull_request) === null || _d === void 0 ? void 0 : _d.number),
+            pull_number: Number(pr_number),
             reviewers: users
         });
-        core.info(`${JSON.stringify(users)} assigned for review of Pull Request #${(_f = (_e = context === null || context === void 0 ? void 0 : context.payload) === null || _e === void 0 ? void 0 : _e.pull_request) === null || _f === void 0 ? void 0 : _f.number} on ${(_g = context === null || context === void 0 ? void 0 : context.repo) === null || _g === void 0 ? void 0 : _g.repo}`);
+        core.info(`${JSON.stringify(users)} assigned for review of Pull Request #${pr_number} on ${(_c = context === null || context === void 0 ? void 0 : context.repo) === null || _c === void 0 ? void 0 : _c.repo}`);
     }
     catch (error) {
         core.setFailed(error === null || error === void 0 ? void 0 : error.message);
@@ -6017,8 +6015,6 @@ function getCleanUsersList(context, rawUserList = ``) {
     var _a;
     let users = [...(_a = rawUserList === null || rawUserList === void 0 ? void 0 : rawUserList.split(',')) === null || _a === void 0 ? void 0 : _a.map(user => user === null || user === void 0 ? void 0 : user.trim())];
     users = filterDuplicateUsers(users);
-    users = filterPullRequestAuthor(context, users);
-    users = filterExistingReviewers(context, users);
     return users;
 }
 function filterDuplicateUsers(users = []) {
@@ -6042,10 +6038,6 @@ function hasValidOwnerInContext(context) {
 function hasValidRepoInContext(context) {
     var _a;
     return !!((_a = context === null || context === void 0 ? void 0 : context.repo) === null || _a === void 0 ? void 0 : _a.repo);
-}
-function hasValidPullRequestNumberInContext(context) {
-    var _a, _b;
-    return !!Number((_b = (_a = context === null || context === void 0 ? void 0 : context.payload) === null || _a === void 0 ? void 0 : _a.pull_request) === null || _b === void 0 ? void 0 : _b.number);
 }
 function getExistingReviewers(context) {
     var _a, _b;

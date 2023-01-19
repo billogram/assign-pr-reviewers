@@ -6,6 +6,7 @@ import { Context } from '@actions/github/lib/context';
     try {
         const context: Context = github?.context;
         const token: string = core.getInput('token', { required: true });
+        const pr_number: string = core.getInput('pr_number', { required: true });
         const ignoreDrafts: string = core.getInput('ignore-drafts', { required: false });
         const users: string[] = getCleanUsersList(context, core.getInput('users', { required: true }));
 
@@ -29,21 +30,17 @@ import { Context } from '@actions/github/lib/context';
             return core.setFailed(`Valid repo is missing from context`);
         }
 
-        if (!hasValidPullRequestNumberInContext(context)) {
-            return core.setFailed(`Valid Pull Request number is missing from context`);
-        }
-
         core.setSecret(token);
 
         const octokit = github.getOctokit(token);
         await octokit.pulls.requestReviewers({
             owner: context?.repo?.owner,
             repo: context?.repo?.repo,
-            pull_number: Number(context?.payload?.pull_request?.number),
+            pull_number: Number(pr_number),
             reviewers: users
         });
 
-        core.info(`${JSON.stringify(users)} assigned for review of Pull Request #${context?.payload?.pull_request?.number} on ${context?.repo?.repo}`);
+        core.info(`${JSON.stringify(users)} assigned for review of Pull Request #${pr_number} on ${context?.repo?.repo}`);
 
     } catch (error) {
         core.setFailed(error?.message);
@@ -55,8 +52,6 @@ import { Context } from '@actions/github/lib/context';
 function getCleanUsersList(context: Context, rawUserList: string = ``): string[] {
     let users: string[] = [...rawUserList?.split(',')?.map(user => user?.trim())];
     users = filterDuplicateUsers(users);
-    users = filterPullRequestAuthor(context, users);
-    users = filterExistingReviewers(context, users);
 
     return users;
 }
@@ -84,10 +79,6 @@ function hasValidOwnerInContext(context: Context): boolean {
 
 function hasValidRepoInContext(context: Context): boolean {
     return !!context?.repo?.repo;
-}
-
-function hasValidPullRequestNumberInContext(context: Context): boolean {
-    return !!Number(context?.payload?.pull_request?.number);
 }
 
 function getExistingReviewers(context: Context): string[] | null {
