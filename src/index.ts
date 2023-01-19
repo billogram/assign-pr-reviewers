@@ -18,7 +18,7 @@ import { Context } from '@actions/github/lib/context';
               format: 'diff'
             }
         });
-        core.info(pullRequest);
+        core.info(`XXX: ${pullRequest.requested_reviewers}`);
 
         if (!token) {
             return core.setFailed(`Required input "token" not provided`);
