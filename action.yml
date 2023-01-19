@@ -8,6 +8,9 @@ inputs:
   users:
     description: 'Comma-separated users to be added as reviewers (example: "itsOliverBott, SantaClaus, b4tman, sp0derman")'
     required: true
+  pr_number:
+    description: 'PR number'
+    required: true
   ignore-drafts:
     description: 'Ignore action if PR is a draft'
     required: false
