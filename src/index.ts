@@ -10,6 +10,8 @@ import { Context } from '@actions/github/lib/context';
         const ignoreDrafts: string = core.getInput('ignore-drafts', { required: false });
         const users: string[] = getCleanUsersList(context, core.getInput('users', { required: true }));
 
+        const octokit = github.getOctokit(token);
+
         const { data: pullRequest } = await octokit.pulls.get({
             owner: context?.repo?.owner,
             repo: context?.repo?.repo,
@@ -44,7 +46,6 @@ import { Context } from '@actions/github/lib/context';
 
 
 
-        const octokit = github.getOctokit(token);
         await octokit.pulls.requestReviewers({
             owner: context?.repo?.owner,
             repo: context?.repo?.repo,
