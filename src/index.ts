@@ -18,7 +18,7 @@ import { Context } from '@actions/github/lib/context';
               format: 'diff'
             }
         });
-        console.log(pullRequest);
+        core.info(pullRequest);
 
         if (!token) {
             return core.setFailed(`Required input "token" not provided`);
