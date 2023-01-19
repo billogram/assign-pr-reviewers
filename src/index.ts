@@ -12,16 +12,6 @@ import { Context } from '@actions/github/lib/context';
 
         const octokit = github.getOctokit(token);
 
-        const { data: pullRequest } = await octokit.pulls.get({
-            owner: context?.repo?.owner,
-            repo: context?.repo?.repo,
-            pull_number: Number(pr_number),
-            /*mediaType: {
-              format: 'diff'
-            }*/
-        });
-        console.log(pullRequest);
-
         if (!token) {
             return core.setFailed(`Required input "token" not provided`);
         }
