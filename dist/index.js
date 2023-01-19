@@ -5974,7 +5974,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__webpack_require__(186));
 const github = __importStar(__webpack_require__(438));
 (() => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c;
     try {
         const context = github === null || github === void 0 ? void 0 : github.context;
         const token = core.getInput('token', { required: true });
@@ -5982,12 +5982,6 @@ const github = __importStar(__webpack_require__(438));
         const ignoreDrafts = core.getInput('ignore-drafts', { required: false });
         const users = getCleanUsersList(context, core.getInput('users', { required: true }));
         const octokit = github.getOctokit(token);
-        const { data: pullRequest } = yield octokit.pulls.get({
-            owner: (_a = context === null || context === void 0 ? void 0 : context.repo) === null || _a === void 0 ? void 0 : _a.owner,
-            repo: (_b = context === null || context === void 0 ? void 0 : context.repo) === null || _b === void 0 ? void 0 : _b.repo,
-            pull_number: Number(pr_number),
-        });
-        console.log(pullRequest);
         if (!token) {
             return core.setFailed(`Required input "token" not provided`);
         }
@@ -6005,12 +5999,12 @@ const github = __importStar(__webpack_require__(438));
         }
         core.setSecret(token);
         yield octokit.pulls.requestReviewers({
-            owner: (_c = context === null || context === void 0 ? void 0 : context.repo) === null || _c === void 0 ? void 0 : _c.owner,
-            repo: (_d = context === null || context === void 0 ? void 0 : context.repo) === null || _d === void 0 ? void 0 : _d.repo,
+            owner: (_a = context === null || context === void 0 ? void 0 : context.repo) === null || _a === void 0 ? void 0 : _a.owner,
+            repo: (_b = context === null || context === void 0 ? void 0 : context.repo) === null || _b === void 0 ? void 0 : _b.repo,
             pull_number: Number(pr_number),
             reviewers: users
         });
-        core.info(`${JSON.stringify(users)} assigned for review of Pull Request #${pr_number} on ${(_e = context === null || context === void 0 ? void 0 : context.repo) === null || _e === void 0 ? void 0 : _e.repo}`);
+        core.info(`${JSON.stringify(users)} assigned for review of Pull Request #${pr_number} on ${(_c = context === null || context === void 0 ? void 0 : context.repo) === null || _c === void 0 ? void 0 : _c.repo}`);
     }
     catch (error) {
         core.setFailed(error === null || error === void 0 ? void 0 : error.message);
